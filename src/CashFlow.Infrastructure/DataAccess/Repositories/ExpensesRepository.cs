@@ -25,10 +25,10 @@ internal class ExpensesRepository(CashFlowDbContext context) : IExpensesReadOnly
 
     public async Task<List<Expense>> GetAll() => await _context.Expenses.AsNoTracking().ToListAsync();
 
-   async Task<Expense?> IExpensesReadOnlyRepository.GetById(long id) =>
-            await _context.Expenses
-            .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Id == id);
+    async Task<Expense?> IExpensesReadOnlyRepository.GetById(long id) =>
+             await _context.Expenses
+             .AsNoTracking()
+             .FirstOrDefaultAsync(e => e.Id == id);
 
     async Task<Expense?> IExpensesUpdateOnlyRepository.GetById(long id) =>
             await _context.Expenses

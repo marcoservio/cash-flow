@@ -70,6 +70,24 @@ namespace CashFlow.Domain.Reports {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cash.
+        /// </summary>
+        public static string CASH {
+            get {
+                return ResourceManager.GetString("CASH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Credit Card.
+        /// </summary>
+        public static string CREDIT_CARD {
+            get {
+                return ResourceManager.GetString("CREDIT_CARD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Date.
         /// </summary>
         public static string DATE {
@@ -79,11 +97,38 @@ namespace CashFlow.Domain.Reports {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Debit card.
+        /// </summary>
+        public static string DEBIT_CARD {
+            get {
+                return ResourceManager.GetString("DEBIT_CARD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Description.
         /// </summary>
         public static string DESCRIPTION {
             get {
                 return ResourceManager.GetString("DESCRIPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Eletronic Transfer.
+        /// </summary>
+        public static string ELETRONIC_TRANSFER {
+            get {
+                return ResourceManager.GetString("ELETRONIC_TRANSFER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Expenses for.
+        /// </summary>
+        public static string EXPENSES_FOR {
+            get {
+                return ResourceManager.GetString("EXPENSES_FOR", resourceCulture);
             }
         }
         
@@ -102,6 +147,15 @@ namespace CashFlow.Domain.Reports {
         public static string TITLE {
             get {
                 return ResourceManager.GetString("TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Total spent in {0}.
+        /// </summary>
+        public static string TOTAL_SPENT_IN {
+            get {
+                return ResourceManager.GetString("TOTAL_SPENT_IN", resourceCulture);
             }
         }
     }
