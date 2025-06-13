@@ -8,6 +8,8 @@ A Arquitetura da **API** basea-se em **REST**, utilizando métodos **HTTP** padr
 
 Dentre os pacotes NuGet utilizados, o **AutoMapper** é responsável pelo mapeamento entre objetos de dominio e requisição/resposta, reduzindo a necessidade de código repetitivo e manual. O **FluentAssertions** é utilizado nos testes de unidade para tornar as verificaçãoes mais legiveis ajudando a escrever teste claros e compreensíveis. Para as validções o **FluentValidation** é usado para implementar regras de validação de forma simples e intuitiva nas classe de requisições, mantendo o código limipo e fácil de manter. Por fim o **EntityFramework** atua como um ORM(Object Relationl Mapper) que simplifica as integraçoes com o banco de dados, permitindo o uso de objetos .NET para manipular dados diretamente sem a necessidade de lidar com consultas SQL.
 
+![hero-image]
+
 ### Features
 
 - **Domain-Driven Design (DDD):** Estrutura modular que facilita o entendimento e a manutenção do domínio da aplicação.
@@ -22,7 +24,7 @@ Para obter uma cópio local funcionando, siga estes passos simples.
 ### Requisitos
 
 - Visual Studio versão 2022+ ou Visual Studio Code
-- Winddows 10+ ou Linux/MacOS com [.NET SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0) instalado
+- Winddows 10+ ou Linux/MacOS com [.NET SDK][dot-net-sdk] instalado
 - MySql Server
 
 ### Instalação
@@ -35,3 +37,9 @@ Para obter uma cópio local funcionando, siga estes passos simples.
 
 2. Preencha as informações no arquivo `appsettings.Development.json`.
 3. Execute a API e aproveite o seu teste :)
+
+<!-- Links -->
+[dot-net-sdk]: https://dotnet.microsoft.com/pt-br/download/dotnet/8.0
+
+<!-- Images -->
+[hero-image]: images/heroimage.png
