@@ -2,7 +2,7 @@
 
 public class FontHelper
 {
-    public const string RELEWAY_REGULAR = "Releway-Regular";
+    public const string RELEWAY_REGULAR = "Raleway-Regular";
     public const string RELEWAY_BLACK = "Raleway-Black";
     public const string WORKSANS_REGULAR = "WorkSans-Regular";
     public const string WORKSANS_BLACK = "WorkSans-Black";
