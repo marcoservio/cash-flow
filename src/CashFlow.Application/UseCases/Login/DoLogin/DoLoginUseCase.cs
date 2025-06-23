@@ -17,7 +17,7 @@ public class DoLoginUseCase(IUserReadOnlyRepository userReadOnlyRepository, IPas
     {
         Validate(request);
 
-        var user = await _userReadOnlyRepository.GetByEmailAsync(request.Email) ?? throw new InvalidLoginException();
+        var user = await _userReadOnlyRepository.GetByEmail(request.Email) ?? throw new InvalidLoginException();
 
         var passwordMatch = _passwordEncripter.Verify(request.Password, user.Password);
 

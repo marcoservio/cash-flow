@@ -13,6 +13,7 @@ public class DoLoginValidator : AbstractValidator<RequestLoginJson>
             .NotEmpty()
             .WithMessage(ResourceErrorMessages.EMAIL_EMPTY)
             .EmailAddress()
+            .When(u => !string.IsNullOrWhiteSpace(u.Email), ApplyConditionTo.CurrentValidator)
             .WithMessage(ResourceErrorMessages.EMAIL_INVALID);
 
         RuleFor(u => u.Password)
