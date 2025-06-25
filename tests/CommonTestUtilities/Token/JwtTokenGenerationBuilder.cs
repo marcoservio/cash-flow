@@ -1,5 +1,5 @@
 ﻿using CashFlow.Domain.Entities;
-using CashFlow.Domain.Security.Tokens;
+using CashFlow.Domain.Security.Tokens.Generator;
 using Moq;
 
 namespace CommonTestUtilities.Token;

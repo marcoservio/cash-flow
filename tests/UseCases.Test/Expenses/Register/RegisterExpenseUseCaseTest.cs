@@ -45,6 +45,6 @@ public class RegisterExpenseUseCaseTest
         var unitOfWork = UnitOfWorkBuilder.Build();
         var mapper = MapperBuilder.Build();
 
-        return new RegisterExpenseUseCase(writeRepository, unitOfWork, mapper);
+        return new RegisterExpenseUseCase(writeRepository, unitOfWork, mapper, null!);
     }
 }

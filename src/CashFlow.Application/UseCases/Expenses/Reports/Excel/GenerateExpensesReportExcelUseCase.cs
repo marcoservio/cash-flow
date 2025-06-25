@@ -2,29 +2,33 @@
 using CashFlow.Domain.Extensions;
 using CashFlow.Domain.Reports;
 using CashFlow.Domain.Repositories.Expenses;
+using CashFlow.Domain.Services.LoggedUser;
 using ClosedXML.Excel;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Excel;
 
-public class GenerateExpensesReportExcelUseCase(IExpensesReadOnlyRepository readOnlyRepository) : IGenerateExpensesReportExcelUseCase
+public class GenerateExpensesReportExcelUseCase(IExpensesReadOnlyRepository readOnlyRepository, ILoggedUser loggedUser) : IGenerateExpensesReportExcelUseCase
 {
     private const string CURRENCY_SYMBOL = "R$";
     private readonly IExpensesReadOnlyRepository _readOnlyRepository = readOnlyRepository;
+    private readonly ILoggedUser _loggedUser = loggedUser;
 
     public async Task<byte[]> Execute(DateOnly month)
     {
-        var expenses = await _readOnlyRepository.FilterByMonth(month);
+        var authenticatedUser = await _loggedUser.Get();
+
+        var expenses = await _readOnlyRepository.FilterByMonth(authenticatedUser, month);
 
         if (expenses.Count == 0)
             return [];
 
         using var workbook = new XLWorkbook
         {
-            Author = "CashFlow"
+            Author = authenticatedUser.Name
         };
 
         workbook.Style.Font.FontSize = 12;
-        workbook.Style.Font.FontName = "Times New Roman";
+        workbook.Style.Font.FontName = "Arial";
 
         var worksheet = workbook.Worksheets.Add(month.ToString("Y"));
 
@@ -69,7 +73,7 @@ public class GenerateExpensesReportExcelUseCase(IExpensesReadOnlyRepository read
 
         worksheet.Cells("A1:E1").Style.Font.Bold = true;
 
-        worksheet.Cell("A1:E1").Style.Fill.BackgroundColor = XLColor.FromHtml("#F5C2B6");
+        worksheet.Cells("A1:E1").Style.Fill.BackgroundColor = XLColor.FromHtml("#F5C2B6");
 
         worksheet.Cell("A1").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
         worksheet.Cell("B1").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);

@@ -1,6 +1,8 @@
 using CashFlow.Api.Filters;
 using CashFlow.Api.Middleware;
+using CashFlow.Api.Token;
 using CashFlow.Application;
+using CashFlow.Domain.Security.Tokens;
 using CashFlow.Infrastructure;
 using CashFlow.Infrastructure.Extensions;
 using CashFlow.Infrastructure.Migrations;
@@ -55,6 +57,9 @@ builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)))
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+builder.Services.AddScoped<ITokenProvider, HttpContentTokenValue>();
+builder.Services.AddHttpContextAccessor();
+
 var signingKey = builder.Configuration.GetValue<string>("Settings:Jwt:SigningKey")!;
 
 builder.Services.AddAuthentication(config =>
@@ -85,11 +90,11 @@ app.UseMiddleware<CultureMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-app.UseAuthorization();  
+app.UseAuthorization();
 
 app.MapControllers();
 
-if(!builder.Configuration.IsTestEnvironment())
+if (!builder.Configuration.IsTestEnvironment())
     await MigrateDatabaseAsync();
 
 app.Run();

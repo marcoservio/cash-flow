@@ -9,5 +9,5 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public Guid UserIdentifier { get; set; } = Guid.NewGuid();
-    public string Rule { get; set; } = Roles.TEAM_MEMBER;
+    public string Role { get; set; } = Roles.TEAM_MEMBER;
 }
