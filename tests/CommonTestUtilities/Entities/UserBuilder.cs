@@ -14,6 +14,6 @@ public class UserBuilder
             .RuleFor(u => u.Id, f => 1)
             .RuleFor(u => u.Name, f => f.Person.FirstName)
             .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.Name))
-            .RuleFor(u => u.Password, (f, u) => passwordEncripter.Encrypt(u.Password));
+            .RuleFor(u => u.Password, (f, u) => f.Internet.Password(prefix: "!Aa1"));
     }
 }
