@@ -1,18 +1,18 @@
-﻿using CashFlow.Application.UseCases.Users.Register;
+﻿using CashFlow.Application.UseCases.Users.Update;
 using CashFlow.Exception;
 using CommonTestUtilities.Requests;
 using FluentAssertions;
 
-namespace Validators.Tests.User.Register;
+namespace Validators.Tests.User.Update;
 
-public class RegisterUserValidatorTest
+public class UpdateUserValidatorTest
 {
     [Fact]
     public void Success()
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = RequestUpdateUserJsonBuilder.Build();
 
-        var result = new  RegisterUserValidator().Validate(request);
+        var result = new UpdateUserValidator().Validate(request);
 
         result.IsValid.Should().BeTrue();
     }
@@ -23,10 +23,10 @@ public class RegisterUserValidatorTest
     [InlineData(null)]
     public void Error_Name_Empty(string? name)
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = RequestUpdateUserJsonBuilder.Build();
         request.Name = name!;
 
-        var result = new RegisterUserValidator().Validate(request);
+        var result = new UpdateUserValidator().Validate(request);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle(e => e.ErrorMessage.Equals(ResourceErrorMessages.NAME_EMPTY));
@@ -38,10 +38,10 @@ public class RegisterUserValidatorTest
     [InlineData(null)]
     public void Error_Email_Empty(string? email)
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = RequestUpdateUserJsonBuilder.Build();
         request.Email = email!;
 
-        var result = new RegisterUserValidator().Validate(request);
+        var result = new UpdateUserValidator().Validate(request);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle(e => e.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_EMPTY));
@@ -55,24 +55,12 @@ public class RegisterUserValidatorTest
     [InlineData("@.com")]
     public void Error_Email_Invalid(string email)
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = RequestUpdateUserJsonBuilder.Build();
         request.Email = email;
 
-        var result = new RegisterUserValidator().Validate(request);
+        var result = new UpdateUserValidator().Validate(request);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle(e => e.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_INVALID));
-    }
-
-    [Fact]
-    public void Error_Password_Empty()
-    {
-        var request = RequestRegisterUserJsonBuilder.Build();
-        request.Password = string.Empty;
-
-        var result = new RegisterUserValidator().Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(e => e.ErrorMessage.Equals(ResourceErrorMessages.INVALID_PASSWORD));
     }
 }
