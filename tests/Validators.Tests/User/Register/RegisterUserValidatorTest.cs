@@ -64,11 +64,14 @@ public class RegisterUserValidatorTest
         result.Errors.Should().ContainSingle(e => e.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_INVALID));
     }
 
-    [Fact]
-    public void Error_Password_Empty()
+    [Theory]
+    [InlineData("")]
+    [InlineData("    ")]
+    [InlineData(null)]
+    public void Error_Password_Empty(string? password)
     {
         var request = RequestRegisterUserJsonBuilder.Build();
-        request.Password = string.Empty;
+        request.Password = password!;
 
         var result = new RegisterUserValidator().Validate(request);
 
