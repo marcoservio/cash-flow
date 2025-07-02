@@ -4,31 +4,25 @@ using CommonTestUtilities.Requests;
 using FluentAssertions;
 using System.Globalization;
 using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Login.DoLogin;
 
-public class DoLoginTest(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+public class DoLoginTest(CustomWebApplicationFactory factory) : CashFlowClassFixture(factory)
 {
     private readonly string ENDPOINT = "login";
-    private readonly HttpClient _httpClient = factory.CreateClient();
-    private readonly string _name = factory.GetName();
-    private readonly string _email = factory.GetEmail();
-    private readonly string _password = factory.GetPassword();
 
     [Fact]
     public async Task Success()
     {
         var request = new RequestLoginJson
         {
-            Email = _email,
-            Password = _password
+            Email = _user_Team_Member.GetEmail(),
+            Password = _user_Team_Member.GetPassword()
         };
 
-        var result = await _httpClient.PostAsJsonAsync(ENDPOINT, request);
+        var result = await DoPost(requestUri: ENDPOINT, request: request);
 
         result.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -36,7 +30,7 @@ public class DoLoginTest(CustomWebApplicationFactory factory) : IClassFixture<Cu
 
         var response = await JsonDocument.ParseAsync(body);
 
-        response.RootElement.GetProperty("name").GetString().Should().Be(_name);
+        response.RootElement.GetProperty("name").GetString().Should().Be(_user_Team_Member.GetName());
         response.RootElement.GetProperty("token").GetString().Should().NotBeNullOrEmpty();
     }
 
@@ -46,9 +40,7 @@ public class DoLoginTest(CustomWebApplicationFactory factory) : IClassFixture<Cu
     {
         var request = RequestRegisterUserJsonBuilder.Build();
 
-        _httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(culture));
-
-        var result = await _httpClient.PostAsJsonAsync(ENDPOINT, request);
+        var result = await DoPost(requestUri: ENDPOINT, request: request, culture: culture);
 
         result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 

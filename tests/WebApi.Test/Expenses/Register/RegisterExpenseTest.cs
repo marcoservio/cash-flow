@@ -6,18 +6,18 @@ using System.Net;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
-namespace WebApi.Test.Users.Register;
+namespace WebApi.Test.Expenses.Register;
 
-public class RegisterUserTest(CustomWebApplicationFactory factory) : CashFlowClassFixture(factory)
+public class RegisterExpenseTest(CustomWebApplicationFactory factory) : CashFlowClassFixture(factory)
 {
-    private readonly string ENDPOINT = "user";
+    private readonly string ENDPOINT = "expenses";
 
     [Fact]
     public async Task Success()
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
+        var request = RequestRegisterExpenseJsonBuilder.Build();
 
-        var result = await DoPost(requestUri: ENDPOINT, request: request);
+        var result = await DoPost(requestUri: ENDPOINT, request: request, token: _user_Team_Member.GetToken());
 
         result.StatusCode.Should().Be(HttpStatusCode.Created);
 
@@ -25,18 +25,17 @@ public class RegisterUserTest(CustomWebApplicationFactory factory) : CashFlowCla
 
         var response = await JsonDocument.ParseAsync(body);
 
-        response.RootElement.GetProperty("name").GetString().Should().Be(request.Name);
-        response.RootElement.GetProperty("token").GetString().Should().NotBeNullOrEmpty();
+        response.RootElement.GetProperty("title").GetString().Should().Be(request.Title);
     }
 
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Empty_Name(string culture)
     {
-        var request = RequestRegisterUserJsonBuilder.Build();
-        request.Name = string.Empty;
+        var request = RequestRegisterExpenseJsonBuilder.Build();
+        request.Title = string.Empty;
 
-        var result = await DoPost(requestUri: ENDPOINT, request: request, culture: culture);
+        var result = await DoPost(requestUri: ENDPOINT, request: request, token: _user_Team_Member.GetToken(), culture: culture);
 
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -44,7 +43,7 @@ public class RegisterUserTest(CustomWebApplicationFactory factory) : CashFlowCla
 
         var response = await JsonDocument.ParseAsync(body);
 
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(culture));
+        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("TITLE_REQUIRED", new CultureInfo(culture));
 
         response.RootElement.GetProperty("errors")
             .EnumerateArray()
