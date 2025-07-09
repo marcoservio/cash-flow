@@ -10,6 +10,13 @@ internal class UserRepository(CashFlowDbContext context) : IUserReadOnlyReposito
 
     public async Task Add(User user) => await _context.Users.AddAsync(user);
 
+    public async Task Delete(User user)
+    {
+        var userToDelete = await _context.Users.FindAsync(user.Id);
+
+        _context.Users.Remove(userToDelete!);
+    }
+
     public async Task<bool> ExistActiveUserWithEmail(string email) =>
         await _context.Users
             .AsNoTracking()
