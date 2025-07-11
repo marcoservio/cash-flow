@@ -24,5 +24,12 @@ public class ExpenseValidator : AbstractValidator<RequestExpenseJson>
         RuleFor(e => e.PaymentType)
             .IsInEnum()
             .WithMessage(ResourceErrorMessages.PAYMENT_TYPE_INVALID);
+
+        RuleFor(e => e.Tags)
+            .ForEach(tag =>
+            {
+                tag.IsInEnum()
+                    .WithMessage(ResourceErrorMessages.TAG_TYPE_NOT_SUPPORTED);
+            });
     }
 }

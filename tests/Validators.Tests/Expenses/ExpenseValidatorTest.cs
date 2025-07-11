@@ -1,15 +1,12 @@
-﻿using CashFlow.Application.UseCases.Expenses.Register;
+﻿using CashFlow.Application.UseCases.Expenses;
 using CashFlow.Communication.Enums;
 using CashFlow.Exception;
-
 using CommonTestUtilities.Requests;
-
 using FluentAssertions;
-using CashFlow.Application.UseCases.Expenses;
 
-namespace Validators.Tests.Expenses.Register;
+namespace Validators.Tests.Expenses;
 
-public class RegisterExpenseValidatorTest
+public class ExpenseValidatorTest
 {
     [Fact]
     public void Success()
@@ -26,11 +23,11 @@ public class RegisterExpenseValidatorTest
     [InlineData("")]
     [InlineData("     ")]
     [InlineData(null)]
-    public void Error_Title_Empty(string title)
+    public void Error_Title_Empty(string? title)
     {
         var validator = new ExpenseValidator();
         var request = RequestExpenseJsonBuilder.Build();
-        request.Title = title;
+        request.Title = title!;
 
         var result = validator.Validate(request);
 
@@ -83,5 +80,19 @@ public class RegisterExpenseValidatorTest
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle()
             .And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO));
+    }
+
+    [Fact]
+    public void Error_Tag_Invalid()
+    {
+        var validator = new ExpenseValidator();
+        var request = RequestExpenseJsonBuilder.Build();
+        request.Tags.Add((Tag)1000);
+
+        var result = validator.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().ContainSingle()
+            .And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.TAG_TYPE_NOT_SUPPORTED));
     }
 }

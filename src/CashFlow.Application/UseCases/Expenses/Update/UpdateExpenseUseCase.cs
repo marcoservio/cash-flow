@@ -24,6 +24,8 @@ public class UpdateExpenseUseCase(IExpensesUpdateOnlyRepository updateOnlyReposi
 
         var expense = await _updateOnlyRepository.GetById(authenticatedUser, id) ?? throw new NotFoundException(ResourceErrorMessages.EXPENSE_NOT_FOUND);
 
+        expense.Tags.Clear();
+
         _mapper.Map(request, expense);
 
         _updateOnlyRepository.Update(expense);
