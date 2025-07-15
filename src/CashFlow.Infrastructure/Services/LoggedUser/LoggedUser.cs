@@ -1,6 +1,8 @@
 ﻿using CashFlow.Domain.Entities;
 using CashFlow.Domain.Security.Tokens;
 using CashFlow.Domain.Services.LoggedUser;
+using CashFlow.Exception;
+using CashFlow.Exception.ExceptionsBase;
 using CashFlow.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,6 +27,7 @@ public class LoggedUser(CashFlowDbContext context, ITokenProvider tokenProvider)
 
         return await _context.Users
                     .AsNoTracking()
-                    .FirstAsync(u => u.UserIdentifier.Equals(Guid.Parse(identifier)));
+                    .FirstOrDefaultAsync(u => u.UserIdentifier.Equals(Guid.Parse(identifier))) ??
+                    throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
     }
 }
