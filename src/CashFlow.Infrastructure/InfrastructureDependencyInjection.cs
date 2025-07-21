@@ -42,6 +42,9 @@ public static class InfrastructureDependencyInjection
 
     public static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
+        if (configuration.IsTestEnvironment())
+            return;
+
         if (configuration.DatabaseType() == DatabaseTypes.MySQL)
             AddDbContextMySqlServer(services, configuration);
         else
