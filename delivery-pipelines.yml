@@ -1,0 +1,30 @@
+trigger:
+- master
+
+variables:
+  tag: '$(Build.BuildId)'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: DownloadSecureFile@1
+  name: appsettings
+  displayName: Download appsettings.json
+  inputs:
+   secureFile: appsettings.Production.json
+
+- script: |
+    cp $(appsettings.secureFilePath) src/CashFlow.Api/appsettings.Production.json
+
+- task: Docker@2
+  displayName: Build and push and image to docker hub
+  inputs:
+    containerRegistry: 'docker'
+    repository: 'marcoservio/cashflow'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      latest
+      $(tag)
+    
