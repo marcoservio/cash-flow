@@ -1,4 +1,5 @@
-﻿using CashFlow.Domain.Repositories;
+﻿using CashFlow.Domain.Enums;
+using CashFlow.Domain.Repositories;
 using CashFlow.Domain.Repositories.Expenses;
 using CashFlow.Domain.Repositories.User;
 using CashFlow.Domain.Security.Cryptography;
@@ -39,15 +40,28 @@ public static class InfrastructureDependencyInjection
         services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
     }
 
-    private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
+    public static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.IsTestEnvironment())
-            return;
+        if (configuration.DatabaseType() == DatabaseTypes.MySQL)
+            AddDbContextMySqlServer(services, configuration);
+        else
+            AddDbContextSqlServer(services, configuration);
+    }
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
+    public static void AddDbContextMySqlServer(IServiceCollection services, IConfiguration configuration)
+    {
         services.AddDbContext<CashFlowDbContext>(options =>
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        {
+            options.UseMySql(configuration.ConnectionString(), new MySqlServerVersion(new Version(8, 0, 35)));
+        });
+    }
+
+    public static void AddDbContextSqlServer(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<CashFlowDbContext>(options =>
+        {
+            options.UseSqlServer(configuration.ConnectionString());
+        });
     }
 
     private static void AddPasswordEncripter(IServiceCollection services)
